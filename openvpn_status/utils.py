@@ -10,7 +10,8 @@ from humanize.filesize import naturalsize
 from netaddr import EUI, mac_unix
 
 
-DATETIME_FORMAT_OPENVPN = u'%a %b %d %H:%M:%S %Y'
+DATETIME_FORMAT_OPENVPN = u'%Y-%m-%d %H:%M:%S'
+DATETIME_FORMAT_OPENVPN_LEGACY = u'%a %b %d %H:%M:%S %Y'
 RE_VIRTUAL_ADDR_MAC = re.compile(
     u'^{0}:{0}:{0}:{0}:{0}:{0}$'.format(u'[a-f0-9]{2}'), re.I)
 RE_VIRTUAL_ADDR_NETWORK = re.compile(u'/(\\d{1,3})$')
@@ -22,6 +23,13 @@ def parse_time(time):
     if isinstance(time, datetime.datetime):
         return time
     return datetime.datetime.strptime(time, DATETIME_FORMAT_OPENVPN)
+
+
+def parse_time_legacy(time):
+    """Parses date and time from input string in OpenVPN (pre 2.5) logging format."""
+    if isinstance(time, datetime.datetime):
+        return time
+    return datetime.datetime.strptime(time, DATETIME_FORMAT_OPENVPN_LEGACY)
 
 
 def parse_peer(peer):
